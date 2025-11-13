@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "site-de-gerenciamento-de-notas",
-    "slug": "site-de-gerenciamento-de-notas",
+    "name": "app-de-gerenciamento-de-notas",
+    "slug": "app-de-gerenciamento-de-notas",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -38,7 +38,19 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "expo-sqlite",
+      {
+        "enableFTS": true,
+        "useSQLCipher": true,
+        "android": {
+          "enableFTS": false,
+          "useSQLCipher": false
+        },
+        "ios": {
+          "customBuildFlags": ["-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_SNAPSHOT=1"]
+        }
+      }
     ],
     "experiments": {
       "typedRoutes": true,
