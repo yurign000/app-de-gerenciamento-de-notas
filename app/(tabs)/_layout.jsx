@@ -4,22 +4,22 @@ import { Ionicons } from '@expo/vector-icons';
 export default function TabLayout() {
   return (
     <Tabs screenOptions={{
-      tabBarActiveTintColor: 'darkblue',
+      tabBarActiveTintColor: 'tomato',
     }}>
       <Tabs.Screen name="home" options={{
         headerShown: false,
         title: 'Ínicio',
-        tabBarIcon: () => <Ionicons name='home-sharp'/>
+        tabBarIcon: ({focused}) => <Ionicons color={focused ? 'tomato' : 'black'}  name='home-sharp'/>
       }} />
       <Tabs.Screen name="new-item" options={{
         headerShown: false,
         title: 'Adicionar',
-        tabBarIcon: () => <Ionicons name='add-circle'/>
+        tabBarIcon: ({focused}) => <Ionicons color={focused ? 'tomato' : 'black'} name='add-circle'/>
       }} />
       <Tabs.Screen name="configuration" options={{
         headerShown: false,
         title: 'Configurações',
-        tabBarIcon: () => <Ionicons name='settings-sharp'/>
+        tabBarIcon: ({focused}) => <Ionicons color={focused ? 'tomato' : 'black'}  name='settings-sharp'/>
       }} />
     </Tabs>
   );
