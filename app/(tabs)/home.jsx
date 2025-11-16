@@ -31,7 +31,7 @@ export default function HomePage(){
       data={tests}
       renderItem={({item}) => 
         <View style={styles.flatListItem}>
-          <Text style={styles.flatListItemText}>{item.name}</Text>
+          <Text  onPress={() => router.push('/pages/test/'+item.id)} style={styles.flatListItemText}>{item.name}</Text>
         </View>
       }
       keyExtractor={item => item.id}

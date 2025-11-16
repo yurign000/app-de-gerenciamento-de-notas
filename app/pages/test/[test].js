@@ -1,47 +1,101 @@
 import { useGlobalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Score, Student } from "../../../db/example";
+import { Score, Test } from "../../../db/example";
 
-export default function StudentPage() {
-  const { student } = useGlobalSearchParams();
+export default function TestPage() {
+  const { test } = useGlobalSearchParams();
   const [scoresObj, setScoresObj] = useState([]);
-  const [studentObj, setStudentObj] = useState({});
+  const [testObj, setTestObj] = useState({});
 
   useEffect(() => {
-    setStudentObj(Student.getOne(student).student);
-    setScoresObj(Score.getAll().filter(score => score.student.id == student));
+    setTestObj(Test.getOne(Number(test)));
+    setScoresObj(Score.getAll().filter(score => score.test.id == Number(test)));
   }, []);
 
   const getScoresList = () => {
     return scoresObj.map((score, id) => 
       <View key={id} style={styles.scoreData}>
-        <Text style={styles.scoreDataTest}>{score.test.name}</Text>
+        <Text style={styles.scoreDataTest}>{score.student.name}</Text>
         <Text style={styles.scoreDataValue}>{score.score}</Text>
       </View>
     )
   }
 
+  const getMedian = () => {
+    const scores = scoresObj.map(score => score.score).sort();
+
+    if(scores.length == 0) return 0;
+
+    if(scores.length % 2 == 0){
+      return (scores[scores.length/2] + scores[scores.length/2 + 1]) / 2;
+    }
+    else{
+      return (scores[(scores.length + 1) / 2])
+    }
+  }
+
+  const getMode = () => {
+    const scores = scoresObj.map(score => score.score).sort();
+    let modeSavedValues = []
+    let modes = [];
+
+    scores.forEach(score => {
+      if(!modeSavedValues[score]) modeSavedValues[score] = '' 
+      modeSavedValues[score] += String(score) + ' ';
+    })
+    modeSavedValues = modeSavedValues
+      .filter(msValue => msValue)
+      .map(msValue => msValue.trim().split(' ')
+    );
+    modeSavedValues = modeSavedValues.sort((a, b) => a.length - b.length).reverse();
+
+    for(let msValue in modeSavedValues){
+      if(modeSavedValues[msValue].length > 1){
+        if(modes.length == 0) modes.push(modeSavedValues[msValue][0]);
+        else if(modeSavedValues[msValue - 1].length == modeSavedValues[msValue].length){
+          modes.push(modeSavedValues[msValue][0]);
+        }
+        else break;
+      }
+      else break;
+    }
+
+    return modes.join(', ');
+  }
+
+
+  getMode()
+
   return (
     <View style={styles.container}>
-      <View style={styles.studentContainer}>
-        <Text style={styles.studentName}>{studentObj.name}</Text>
+      <View style={styles.testContainer}>
+        <Text style={styles.testName}>{testObj.name}</Text>
         <View style={styles.score}>
           <View style={styles.scoreHeader}>
-            <Text style={styles.scoreHeaderTest}>Avaliações</Text>
+            <Text style={styles.scoreHeaderTest}>Estudantes</Text>
             <Text style={styles.scoreHeaderValue}>Notas</Text>
           </View>
           {scoresObj.length ?
           <>
             {getScoresList()}
-            <View style={styles.scoreAverage}>
+            <View style={styles.scoreAlgorithms}>
               <Text style={styles.scoreHeaderTest}>Média</Text>
               <Text style={styles.scoreHeaderValue}>
                 {(scoresObj.reduce((a, c) => {
-                  console.log(c.score)
                   return a + c.score
                 }, 0) / scoresObj.length).toFixed(2)}
               </Text>
+            </View>
+
+            <View style={styles.scoreAlgorithms}>
+              <Text style={styles.scoreHeaderTest}>Mediana</Text>
+              <Text style={styles.scoreHeaderValue}>{getMedian()}</Text>
+            </View>
+
+            <View style={styles.scoreAlgorithms}>
+              <Text style={styles.scoreHeaderTest}>Moda</Text>
+              <Text style={styles.scoreHeaderValue}>{getMode()}</Text>
             </View>
           </>
           : <View style={styles.scoreData} />
@@ -61,12 +115,12 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
   },
-  studentContainer: {
+  testContainer: {
     flex: 1,
     padding: 10,
     backgroundColor: '#ffffff1e'
   },
-  studentName: {
+  testName: {
     textAlign: 'center',
     fontSize: 20,
     color: '#ffffffff',
@@ -106,7 +160,7 @@ const styles = StyleSheet.create({
   scoreDataValue: {
     color: 'white'
   },
-  scoreAverage: {
+  scoreAlgorithms: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',

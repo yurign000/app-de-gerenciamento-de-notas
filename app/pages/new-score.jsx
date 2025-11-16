@@ -1,7 +1,7 @@
 import { Picker } from "@react-native-picker/picker";
+import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Score, Student, Test } from "../../db/example";
-import { useState } from "react";
 
 export default function NewScore(){
   const [score, setScore] = useState('');
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputContainer: {
-    backgroundColor: '#ffffff71',
+    backgroundColor: '#ffffff44',
     gap: 5,
     padding: 10,
   },

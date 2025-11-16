@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Test } from "../../db/example";
-import { useState } from "react";
 
 export default function NewTest(){
   const [name, setName] = useState("");
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputContainer: {
-    backgroundColor: '#ffffff71',
+    backgroundColor: '#ffffff44',
     gap: 5,
     padding: 10,
   },
